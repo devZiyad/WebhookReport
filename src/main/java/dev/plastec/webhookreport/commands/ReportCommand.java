@@ -178,7 +178,7 @@ public class ReportCommand implements CommandExecutor {
 
         sender.sendMessage(ChatColor.YELLOW + "Setting cooldown...");
         configuration.set("cooldown", Integer.parseInt(cooldown));
-        plugin.getLogger().log(Level.INFO, cooldown);
+        plugin.saveConfig();
         sender.sendMessage(ChatColor.GREEN + "Successfully changed cooldown");
         return true;
     }

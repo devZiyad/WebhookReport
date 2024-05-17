@@ -1,0 +1,17 @@
+name: WebhookReport
+version: '${version}'
+main: dev.plastec.webhookreport.WebhookReport
+api-version: '1.20'
+commands:
+  report:
+    description: The main command for the WebhookReport plugin
+    permission: webhookreport.report
+permissions:
+  webhookreport.bypasscooldown:
+    description: Bypass report send command cooldown
+  webhookreport.setwebhook:
+    description: Setting the webhook url
+  webhookreport.setcooldown:
+    description: Setting the report send cooldown
+  webhookreport.sendreport:
+    description: Sending a report via discord webhook

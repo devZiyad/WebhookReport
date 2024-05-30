@@ -1,4 +1,4 @@
-package dev.plastec.webhookreport.commands;
+package dev.plastec.webhookreport.tabcompletion;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -15,10 +15,10 @@ public class ReportTabCompletion implements TabCompleter {
             return List.of();
         }
 
-        boolean canSetWebhook = sender.hasPermission("webhookreport.setwebhook");
-        boolean canSetCooldown = sender.hasPermission("webhookreport.setcooldown");
+        boolean canSetWebhook = sender.hasPermission("webhookreport.set.webhook");
+        boolean canSetCooldown = sender.hasPermission("webhookreport.set.cooldown");
         boolean canSet = canSetWebhook | canSetCooldown;
-        boolean canSend = sender.hasPermission("webhookreport.sendreport");
+        boolean canSend = sender.hasPermission("webhookreport.send");
 
         if (args.length == 1) {
             List<String> completion = new ArrayList<>();
@@ -56,7 +56,7 @@ public class ReportTabCompletion implements TabCompleter {
         if (args.length == 3) {
             if (args[0].equalsIgnoreCase("set") && canSet) {
                 if (args[1].equalsIgnoreCase("webhook") && canSetWebhook) {
-                    return List.of("<url>");
+                    return List.of("public", "private");
                 }
 
                 if (args[1].equalsIgnoreCase("cooldown") && canSetCooldown) {
@@ -66,6 +66,14 @@ public class ReportTabCompletion implements TabCompleter {
 
             if (args[0].equalsIgnoreCase("send") && canSend) {
                 return List.of("<message>");
+            }
+        }
+
+        if (args.length == 4) {
+            if (args[0].equalsIgnoreCase("set") && canSet) {
+                if (args[1].equalsIgnoreCase("webhook") && canSetWebhook) {
+                    return List.of("<url>");
+                }
             }
         }
 

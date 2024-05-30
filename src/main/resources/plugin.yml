@@ -5,13 +5,15 @@ api-version: '1.20'
 commands:
   report:
     description: The main command for the WebhookReport plugin
-    permission: webhookreport.report
+    permission: webhookreport
 permissions:
   webhookreport.bypasscooldown:
     description: Bypass report send command cooldown
-  webhookreport.setwebhook:
+  webhookreport.set:
+    description: Allowed to make changes to the config using the /report set command
+  webhookreport.set.webhook:
     description: Setting the webhook url
-  webhookreport.setcooldown:
+  webhookreport.set.cooldown:
     description: Setting the report send cooldown
-  webhookreport.sendreport:
+  webhookreport.send:
     description: Sending a report via discord webhook

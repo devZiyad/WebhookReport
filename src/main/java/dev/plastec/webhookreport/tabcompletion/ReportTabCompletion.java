@@ -11,7 +11,7 @@ import java.util.List;
 public class ReportTabCompletion implements TabCompleter {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
-        if (!(sender instanceof Player player)) {
+        if (!(sender instanceof Player)) {
             return List.of();
         }
 
@@ -19,6 +19,7 @@ public class ReportTabCompletion implements TabCompleter {
         boolean canSetCooldown = sender.hasPermission("webhookreport.set.cooldown");
         boolean canSet = canSetWebhook | canSetCooldown;
         boolean canSend = sender.hasPermission("webhookreport.send");
+        boolean canStatus = sender.hasPermission("webhookreport.status");
 
         if (args.length == 1) {
             List<String> completion = new ArrayList<>();
@@ -28,6 +29,10 @@ public class ReportTabCompletion implements TabCompleter {
 
             if (canSend) {
                 completion.add("send");
+            }
+
+            if (canStatus) {
+                completion.add("status");
             }
 
             return completion;

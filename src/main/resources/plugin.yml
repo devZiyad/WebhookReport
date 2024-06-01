@@ -17,3 +17,5 @@ permissions:
     description: Setting the report send cooldown
   webhookreport.send:
     description: Sending a report via discord webhook
+  webhookreport.status:
+    description: Display plugin's status

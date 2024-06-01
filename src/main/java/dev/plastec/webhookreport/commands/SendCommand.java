@@ -16,6 +16,7 @@ import java.util.logging.Level;
 public class SendCommand extends SubCommand {
     Map<String, Long> durationBetweenSend;
     int sendReportCooldown;
+    public static int sessionReportCount = 0;
 
     public SendCommand(Plugin plugin, FileConfiguration config, String name, String permission) {
         super(plugin, config, name, permission);
@@ -99,6 +100,7 @@ public class SendCommand extends SubCommand {
             webhook.execute();
             sender.sendMessage(ChatColor.GREEN + "Successfully submitted report");
             durationBetweenSend.put(sender.getName(), new Date().getTime());
+            sessionReportCount++;
             return true;
         } catch (Exception e) {
             sender.sendMessage(ChatColor.RED + "Could not submit report. Please contact server administration");

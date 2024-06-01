@@ -3,7 +3,7 @@ plugins {
 }
 
 group = 'dev.plastec'
-version = '1.5-snapshot'
+version = '1.5-snapshot2'
 
 repositories {
     mavenCentral()

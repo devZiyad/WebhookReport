@@ -26,9 +26,12 @@ public final class WebhookReport extends JavaPlugin {
 
         SendCommand sendCommand = new SendCommand(this, config, "send", "webhookreport.send");
 
+        StatusCommand statusCommand = new StatusCommand(this, config, "status", "webhookreport.status");
+
         ReportCommand reportCommand = new ReportCommand(this);
         reportCommand.commands.add(setCommand);
         reportCommand.commands.add(sendCommand);
+        reportCommand.commands.add(statusCommand);
 
         ReportTabCompletion reportTabCompletion = new ReportTabCompletion();
 
@@ -47,11 +50,13 @@ public final class WebhookReport extends JavaPlugin {
         getConfig().options().copyDefaults(true);
         saveConfig();
 
-        if (config.getString("webhook.public").isEmpty()) {
+        String publicWebhook = config.getString("webhook.public");
+        if (publicWebhook == null || publicWebhook.isEmpty()) {
             getLogger().log(Level.WARNING, "public webhook is not set. use the /report set public <webhook> command or change it in config.yml");
         }
 
-        if (config.getString("webhook.private").isEmpty()) {
+        String privateWebhook = config.getString("webhook.private");
+        if (privateWebhook == null || privateWebhook.isEmpty()) {
             getLogger().log(Level.WARNING, "private webhook is not set. use the /report set private <webhook> command or change it in config.yml");
         }
     }

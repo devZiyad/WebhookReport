@@ -2,6 +2,7 @@ package dev.plastec.webhookreport;
 
 import dev.plastec.webhookreport.commands.*;
 import dev.plastec.webhookreport.tabcompletion.ReportTabCompletion;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -38,6 +39,7 @@ public final class WebhookReport extends JavaPlugin {
         getCommand("report").setExecutor(reportCommand);
         getCommand("report").setTabCompleter(reportTabCompletion);
 
+        // Config checks
         if (!config.isSet("webhook.public"))
             config.set("webhook.public", "");
 
@@ -59,6 +61,15 @@ public final class WebhookReport extends JavaPlugin {
         if (privateWebhook == null || privateWebhook.isEmpty()) {
             getLogger().log(Level.WARNING, "private webhook is not set. use the /report set private <webhook> command or change it in config.yml");
         }
+
+        // Schedule task for to clear reportsPer30Min count every 30 minutes
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
+            @Override
+            public void run() {
+                SendCommand.publicReportsPer30Min = 0;
+                SendCommand.privateReportsPer30Min = 0;
+            }
+        }, 0, 20 * 60 * 30);
     }
 
     @Override

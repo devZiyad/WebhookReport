@@ -17,6 +17,8 @@ public class SendCommand extends SubCommand {
     Map<String, Long> durationBetweenSend;
     int sendReportCooldown;
     public static int sessionReportCount = 0;
+    public static int publicReportsPer30Min = 0;
+    public static int privateReportsPer30Min = 0;
 
     public SendCommand(Plugin plugin, FileConfiguration config, String name, String permission) {
         super(plugin, config, name, permission);
@@ -58,16 +60,18 @@ public class SendCommand extends SubCommand {
             return false;
         }
 
-        if (!(args[0].equalsIgnoreCase("public") || args[0].equalsIgnoreCase("private"))) {
+        boolean isPublic = args[0].equalsIgnoreCase("public");
+        boolean isPrivate = args[0].equalsIgnoreCase("private");
+        if (!(isPublic || isPrivate)) {
             sender.sendMessage(ChatColor.RED + "Did not specify public or private report");
             return false;
         }
 
         String webhookURL = null;
-        if (args[0].equalsIgnoreCase("public"))
+        if (isPublic)
             webhookURL = config.getString("webhook.public");
 
-        if (args[0].equalsIgnoreCase("private"))
+        if (isPrivate)
             webhookURL = config.getString("webhook.private");
 
 
@@ -75,6 +79,19 @@ public class SendCommand extends SubCommand {
             sender.sendMessage(ChatColor.RED + "WebhookReport is not set up properly. Contact server administration");
             return false;
         }
+
+        if ((isPublic && publicReportsPer30Min >= 30) || (isPrivate && privateReportsPer30Min >= 30)) {
+            StringBuilder builder = new StringBuilder();
+
+            if (isPublic) builder.append("Public");
+            else builder.append("Private");
+
+            builder.append("'s webhook has reached its limit please wait");
+
+            sender.sendMessage(builder.toString());
+            return false;
+        }
+
 
         try {
             DiscordWebhook webhook = new DiscordWebhook(webhookURL);
@@ -88,7 +105,7 @@ public class SendCommand extends SubCommand {
 
             stringBuilder.append(" report:\\n```");
             for (int i = 1; i < args.length; i++) {
-                stringBuilder.append(args[i]);
+                stringBuilder.append(args[i].replace("`", ""));
                 if (i != args.length - 1) {
                     stringBuilder.append(" ");
                 }

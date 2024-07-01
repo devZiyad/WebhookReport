@@ -16,6 +16,22 @@ public final class WebhookReport extends JavaPlugin {
         // Setup default configuration
         config = this.getConfig();
 
+        config.addDefault("webhook.public", "");
+        config.addDefault("webhook.private", "");
+        config.addDefault("cooldown", 15);
+        getConfig().options().copyDefaults(true);
+        saveConfig();
+
+        String publicWebhook = config.getString("webhook.public");
+        if (publicWebhook == null || publicWebhook.isEmpty()) {
+            getLogger().log(Level.WARNING, "public webhook is not set. use the /report set public <webhook> command or change it in config.yml");
+        }
+
+        String privateWebhook = config.getString("webhook.private");
+        if (privateWebhook == null || privateWebhook.isEmpty()) {
+            getLogger().log(Level.WARNING, "private webhook is not set. use the /report set private <webhook> command or change it in config.yml");
+        }
+
         // Setup commands
         SetCommand setCommand = new SetCommand(this, config, "set", "webhookreport.set");
 
@@ -38,29 +54,6 @@ public final class WebhookReport extends JavaPlugin {
 
         getCommand("report").setExecutor(reportCommand);
         getCommand("report").setTabCompleter(reportTabCompletion);
-
-        // Config checks
-        if (!config.isSet("webhook.public"))
-            config.set("webhook.public", "");
-
-        if (!config.isSet("webhook.private"))
-            config.set("webhook.private", "");
-
-        if (!config.isSet("cooldown"))
-            config.set("cooldown", 15);
-
-        getConfig().options().copyDefaults(true);
-        saveConfig();
-
-        String publicWebhook = config.getString("webhook.public");
-        if (publicWebhook == null || publicWebhook.isEmpty()) {
-            getLogger().log(Level.WARNING, "public webhook is not set. use the /report set public <webhook> command or change it in config.yml");
-        }
-
-        String privateWebhook = config.getString("webhook.private");
-        if (privateWebhook == null || privateWebhook.isEmpty()) {
-            getLogger().log(Level.WARNING, "private webhook is not set. use the /report set private <webhook> command or change it in config.yml");
-        }
 
         // Schedule task for to clear reportsPer30Min count every 30 minutes
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {

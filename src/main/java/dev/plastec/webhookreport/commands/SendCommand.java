@@ -15,7 +15,6 @@ import java.util.logging.Level;
 
 public class SendCommand extends SubCommand {
     Map<String, Long> durationBetweenSend;
-    int sendReportCooldown;
     public static int sessionReportCount = 0;
     public static int publicReportsPer30Min = 0;
     public static int privateReportsPer30Min = 0;
@@ -23,7 +22,6 @@ public class SendCommand extends SubCommand {
     public SendCommand(Plugin plugin, FileConfiguration config, String name, String permission) {
         super(plugin, config, name, permission);
         this.durationBetweenSend = new HashMap<>();
-        this.sendReportCooldown = config.getInt("cooldown");
     }
 
     @Override
@@ -41,6 +39,7 @@ public class SendCommand extends SubCommand {
         boolean useCooldown = !sender.hasPermission("webhookreport.bypasscooldown");
 
         if (useCooldown) {
+            int sendReportCooldown = config.getInt("cooldown");
             long timeElapsed;
             if (durationBetweenSend.containsKey(sender.getName())) {
                 timeElapsed = new Date().getTime() - durationBetweenSend.get(sender.getName());
